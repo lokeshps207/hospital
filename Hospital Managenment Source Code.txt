@@ -1,0 +1,455 @@
+import mysql.connector as ms
+import time
+import tkinter as tk
+import random
+from datetime import datetime
+
+#EMPLOYEE
+def Employee_details():
+    c=0
+    cur.execute("SELECT * FROM EMPLOYEES")
+    row=cur.fetchall()  
+    for i in row:
+        print(i)
+        
+def Add_Employee():
+    eid=input("\nEnter Employee ID: ")
+    name=input("Enter Name: ")
+    dept=input("Enter Department: ")
+    age=input("Enter Age: ")
+    gen=input("Enter Gender(M/F): ")
+    sal=input("Enter Monthly Salary: ")
+    mno=input("Enter Mobile no of Employee: ")
+    cur.execute("Insert into Employees values('{}','{}','{}','{}','{}','{}','{}').         format(eid,name,dept,age,gen,sal,mno))
+
+    con.commit()
+    print("SUCCESSFULLY ADDED")							
+def Delete_Employee():
+    eid=input("Enter the EID to delete: ")
+    cur.execute("DELETE FROM EMPLOYEES WHERE EID="+eid)
+    print("""
+                    ========================================
+                                DELETING RECORD
+                    ========================================
+    """)
+    time.sleep(1)
+
+
+
+def Modify_Employee():
+    eid=input("Enter the EID to MODIFY: ")
+    sal=input("Enter the New Salary: ")
+    cur.execute(f"UPDATE EMPLOYEES SET SALARY={sal} WHERE EID="+eid)
+    print("""
+                    ========================================
+                               MODIFIED RECORD
+                    ========================================
+    """)
+    time.sleep(1)
+  
+
+
+
+
+
+
+												  
+#PATIENT
+def Patient_details():
+    c=0
+    cur.execute("SELECT * FROM PATIENTS")
+    row=cur.fetchall()  
+    for i in row:
+        print(i)        
+
+def Add_Patient():
+    pid=input("\nEnter Patient ID: ")
+    name=input("Enter Name: ")
+    issue=input("Enter Issue: ")
+    age=input("Enter Age: ")
+    gen=input("Enter Gender: ")
+    fee=input("Enter Fees: ")
+    mno=input("Enter Mobile No of Patient: ")
+    bno=input("Enter Bill no: ")
+    cur.execute("insert into Patients values('{}','{}','{}','{}','{}','{}','{}','{}')".format(pid,name,issue,age,gen,fee,mno,bno))
+    con.commit()
+    print("SUCCESSFULLY ADDED")
+
+
+def Delete_Patient():
+    pid=input("Enter the PID to delete: ")
+    cur.execute("DELETE FROM PATIENTS WHERE PID="+pid)
+
+
+												  
+    print("""
+                    ========================================
+                                DELETING RECORD
+                    ========================================
+    """)
+    time.sleep(1)
+    
+
+#EMT
+def EMT_details():
+    c=0
+    cur.execute("SELECT * FROM EMT")
+    row=cur.fetchall()  
+    for i in row:
+        print(i)
+        
+def Add_Vehicle():
+    vno=input("\nEnter Vehicle No: ")
+    vtype=input("Enter Vehicle type: ")
+    dname=input("Enter Driver Name: ")
+    mno=input("Enter Mobile No of Driver: ")
+    cur.execute("insert into EMT values('{}','{}','{}','{}')".format(vno,vtype,dname,mno))
+    con.commit()
+    print("SUCCESSFULLY ADDED")
+
+												  
+def Delete_Vehicle():
+    vno=input("Enter the Vehicle No to delete: ")
+    cur.execute("DELETE FROM EMT WHERE VNO="+vno)
+    print("""
+                    ========================================
+                                DELETING RECORD
+                    ========================================
+    """)
+    time.sleep(1)
+
+
+def Modify_Vehicle():
+    vno=input("Enter the VNO to MODIFY: ")
+    d=input("Enter the New Driver Name: ")
+    m=input("Enter the Mobile Number of New Driver: ")
+    cur.execute(f"UPDATE EMPLOYEES SET DRIVER_NAME={d} AND MOBILE_NO={M} WHERE VNO="+vno)
+    print("""
+                    ========================================
+                               MODIFIED RECORD
+                    ========================================
+    """)
+    time.sleep(1)
+											  
+#PHARMACY
+def Pharmacy_details():
+    c=0
+    cur.execute("SELECT * FROM PHARMACY")
+    row=cur.fetchall()  
+    for i in row:
+        print(i)
+        
+
+def Add_Medicine():
+    mname=input("Enter Medicine Name: ")
+    mtype=input("Enter Medicine Type: ")
+    stk=input("Enter the Stock left: ")
+    pri=input("Enter the Price: ")
+    cur.execute("insert into Pharmacy values('{}','{}','{}','{}')".format(mname,mtype,stk,pri))
+    con.commit()
+    print("SUCCESSFULLY ADDED")
+
+
+def Delete_Medicine():
+    mname=input("Enter the Medicine Name to delete: ")
+    cur.execute("DELETE FROM Pharmacy WHERE MEDICINE_NAME="+mname)
+    print("""
+                    ========================================
+                                DELETING RECORD
+                    ========================================
+    """)
+    time.sleep(1)										  
+def Modify_Medicine():
+    mname=input("Enter the Medicine Name to Modify: ")
+    P=input("Enter the New Price of Medicine: ")
+    cur.execute(f"UPDATE PHARMACY SET PRICE={P} WHERE MEDICINE_NAME="+mname)
+    print("""MEDICINE_NAME
+                    ========================================
+                                MODIFIED RECORD
+                    ========================================
+    """)
+    time.sleep(1)
+
+
+
+#Main Program
+print("""
+                    ========================================
+                         WELCOME TO HNM HOSPITAL SERVER
+                    ========================================
+    """)
+time.sleep(1)
+now = datetime.now()
+dt_string = now.strftime("%d/%m/%Y")
+t_string = now.strftime("%H:%M")
+print("Today's Date =", dt_string)
+print("Current Time =", t_string)
+print()
+time.sleep(1)
+												
+pas=input("Enter the password to unlock the server: ")
+if pas=="qwerty@123":
+    con=ms.connect(host="localhost",user="root",password="")
+    print("\nUNLOCKED SERVER SUCCESSFULLY !!\n")
+    time.sleep(1)
+else:
+    print("\nINCORRECT PASSWORD !!")
+
+try:
+    cur=con.cursor()
+    cur.execute("CREATE DATABASE IF NOT EXISTS HOSPITAL")
+    cur.execute("USE HOSPITAL")
+#CREATING TABLES
+    cur.execute("CREATE TABLE IF NOT EXISTS EMPLOYEES(EID INT(5) PRIMARY KEY,NAME VARCHAR(30),DEPARTMENT VARCHAR(30),AGE INT(2),GENDER VARCHAR(1),SALARY INT(8),MOBILE_NO INT(9) UNIQUE)")
+    cur.execute("CREATE TABLE IF NOT EXISTS PATIENTS(PID INT(5) PRIMARY KEY,NAME VARCHAR(30),ISSUE VARCHAR(30),AGE INT(3),GENDER VARCHAR(1),FEES INT(8),MOBILE_NO INT(9) UNIQUE,BILL_NO VARCHAR(7))")
+    cur.execute("CREATE TABLE IF NOT EXISTS EMT(VNO INT(4) PRIMARY KEY,VTYPE VARCHAR(30),DRIVER_NAME VARCHAR(30),MOBILE_NO INT(9) UNIQUE)")
+    cur.execute("CREATE TABLE IF NOT EXISTS PHARMACY(MEDICINE_NAME VARCHAR(30) PRIMARY KEY,MEDICINE_TYPE VARCHAR(30),STOCK INT(6),PRICE INT(7))")
+    cur.execute("create table if not exists user_data(username varchar(30) primary key,password varchar(30))")
+
+												  
+    while True:
+        print("""
+                            1. SIGN IN (LOGIN)
+                            2. SIGN UP (REGISTER)
+                                                                """)
+        r=int(input("Enter your choice(1/2): "))
+
+        #Register
+        if r==2:
+            print("""
+                        =======================================
+                               PLEASE REGISTER YOURSELF
+                        =======================================
+                                                                 """)
+            time.sleep(1)
+            
+            #get username
+            while True:
+                u=input("Enter your preferred username: ")
+                if u=="" or u.isdigit():
+                    print("\nInvalid username!!\n")
+                    time.sleep(0.5)
+                else:
+                    break
+                
+
+
+												  
+            #get password
+            while True:
+                p=input("\nEnter your preferred password: ")
+                if p=="":
+                    print("\nInvalid password!!\n")
+                    time.sleep(0.5)
+                elif p.isdigit():
+                    print("\nWeakPassword.... Try again")
+                    time.sleep(1)
+                else:
+                    break
+            print("\nEnter the OTP which is sent now!!")
+            
+	#OTP GENERATOR
+            main=tk.Tk()
+            main.geometry("150x100")
+            main.configure(bg="black")
+            x="ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+            ch="".join(random.choices(x,k=4))
+            a=tk.Label(text="YOUR OTP IS",foreground="white",background="black",font=('Times New Roman', 15, 'bold')).pack()
+            c=tk.Label(text="",background="black").pack()
+            b=tk.Label(text=ch,foreground="white",background="black",font=('Times New Roman', 15, 'bold')).pack()
+            main.mainloop()
+            
+
+												
+            otp=input("\nEnter the OTP :")
+            if otp==ch:
+                cur.execute("insert into user_data values('"+u+"','"+p+"')")
+                con.commit()
+                print("\n\t\t\t\t\tLOADING........")
+                time.sleep(1.5)
+            
+            
+                print("""
+                            ========================================
+                                    REGISTERED SUCCESSFULLY
+                            ========================================
+                                                                     """)
+                time.sleep(1)
+
+                x=input("\nEnter any key to continue: ")
+
+            else:
+                print("\nSIGN IN FAILED\n")
+                
+
+        elif r==1:
+            print("""
+                        ==================================
+                                     SIGN IN
+                        ==================================
+                                                            """)
+            time.sleep(1)
+												
+            #check username
+            while True:
+                un=input("Enter the username: ")
+                if un=="":
+                    print("\nInvalid username!!\n")
+                else:
+                    break
+
+
+            #check password
+            while True:
+                ps=input("\nEnter the password: ")
+                if ps=="":
+                    print("\nInvalid password!!\n")
+                else:
+                    break
+
+          
+            cur.execute("select password from user_data where username='"+un+"' and password='"+ps+"'")
+            row=cur.fetchall()
+            if row==[]:
+                print("\nSIGN IN FAILED!!")
+                time.sleep(2)
+                break
+                
+
+
+												  
+            for i in row:
+                a=list(i)                    
+                if a[0]==str(ps):
+                    while True:
+                        print("""
+                                1.EMPLOYEE DETAILS
+                                2.PATIENT DETAILS
+                                3.EMERGENCY MEDICAL TECHNICIANS(EMT)
+                                4.PHARMACY
+                                5.SIGN OUT                                   """)
+
+                        try:
+                            q=int(input("\nEnter your choice: "))
+                        except ValueError:
+                            print("\nEnter only from 1 to 5!!")
+                            q=0
+                   
+     
+                            
+                        #EMPLOYEE DETAILS
+                        if q==1:
+                            print("""
+                                        1. SHOW DETAILS
+                                        2. ADD NEW MEMBER
+                                        3. DELETE EXISTING ONE
+                                        4. MODIFY SALARY OF A EMPLOYEE
+                                        5. EXIT
+                                                                                 """)
+												 
+                            w=int(input("ENTER YOUR CHOICE: "))
+                            if w==1:
+                                Employee_details()
+                            elif w==2:
+                                Add_Employee()
+                            elif w==3:
+                                Delete_Employee()
+                            elif w==4:
+                                Modify_Employee()
+                            elif w==5:
+                                break
+                            else:
+                                print("\nEnter from 1 to 5 only\n")
+
+                        #PATIENT DETAILS
+                        elif q==2:
+                            print("""
+                                        1. SHOW DETAILS
+                                        2. ADD NEW MEMBER
+                                        3. DELETE EXISTING ONE
+                                        4. EXIT
+                                                                                 """)
+                            e=int(input("ENTER YOUR CHOICE: "))
+                            if e==1:
+                                Patient_details()
+                            elif e==2:
+                                Add_Patient()
+												
+                            elif e==3:
+                                Delete_Patient()
+                            elif e==4:
+                                break
+                            else:
+                                print("\nEnter from 1 to 4 only\n")
+
+                        #EMT DETAILS
+                        elif q==3:
+                            print("""
+                                        1. SHOW DETAILS
+                                        2. ADD NEW VEHICLE
+                                        3. DELETE EXISTING ONE
+                                        4. MODIFY DATA OF A VEHICLE
+                                        5. EXIT
+                                                                                 """)
+                            t=int(input("ENTER YOUR CHOICE: "))
+                            if t==1:
+                                EMT_details()
+                            elif t==2:
+                                Add_Vehicle()
+
+                            elif t==3:
+                                Delete_Vehicle()
+                            elif t==4:
+                                Modify_Vehicle()
+                            elif t==5:
+                                break
+												 
+                            else:
+                                print("\nEnter from 1 to 5 only\n")
+
+                        #PHARMACY DETAILS
+                        elif q==4:
+                            print("""
+                                        1. SHOW DETAILS
+                                        2. ADD NEW MEDICINE
+                                        3. DELETE EXISTING ONE
+                                        4. MODIFY PRICE OF A MEDICINE
+                                        5. EXIT
+                                                                                 """)
+                            y=int(input("ENTER YOUR CHOICE: "))
+                            if y==1:
+                                Pharmacy_details()
+                            elif y==2:
+                                Add_Medicine()
+                            elif y==3:
+                                Delete_Medicine()
+                            elif y==4:
+                                Modify_Medicine()
+                            elif y==5:
+                                break
+                            else:
+                                print("\nEnter from 1 to 5 only\n")
+	
+
+																								 
+                        elif q==5:
+                            break
+
+                        else:
+                            print("\nEnter only from 1 to 5!!")
+
+
+        else:
+            break
+                    
+                            
+                                
+                        
+
+
+
+
+                    
+        
+except NameError:
+    print()
